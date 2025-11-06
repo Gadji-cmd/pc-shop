@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PC Shop — Главная</title>
+  <link rel="stylesheet" href="/public/style.css" />
+  <script defer src="/public/app.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="container nav">
+      <div class="logo"><img src="/public/img/logo.png" alt="logo"/> PC Shop</div>
+      <nav class="menu">
+        <a href="/public/index.html">Главная</a>
+        <a href="/public/product.html">Товар</a>
+        <a href="/public/contacts.html">Контакты</a>
+        <a href="#" id="btnOpenAuth" class="btn">Войти</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <img src="/public/img/hero.jpg" class="bg" alt="hero"/>
+      <div class="thumb t1"><img src="/public/img/pc1.jpg" alt="pc"/></div>
+      <div class="thumb t2"><img src="/public/img/pc2.jpg" alt="pc"/></div>
+      <div class="thumb t3"><img src="/public/img/pc3.jpg" alt="pc"/></div>
+      <div class="thumb t4"><img src="/public/img/pc4.jpg" alt="pc"/></div>
+      <div class="thumb t5"><img src="/public/img/pc2.jpg" alt="pc"/></div>
+    </section>
+
+    <h2>Популярные ПК</h2>
+    <div id="products" class="grid"></div>
+  </main>
+
+  <footer class="footer container">
+    © 2025 PC Shop — надёжные сборки для работы и игры
+  </footer>
+
+  <!-- Диалог авторизации -->
+  <dialog id="authDialog">
+    <form id="formLogin">
+      <h3>Вход</h3>
+      <input name="email" type="email" placeholder="Email" required />
+      <input name="password" type="password" placeholder="Пароль" minlength="4" required />
+      <div style="display:flex;gap:8px">
+        <button type="submit" class="btn primary">Войти</button>
+        <button type="button" class="btn" id="btnToRegister">Регистрация</button>
+        <button type="button" class="btn" id="btnCancelLogin">Отмена</button>
+      </div>
+      <p id="authMsg"></p>
+    </form>
+  </dialog>
+
+  <!-- Диалог регистрации -->
+  <dialog id="regDialog">
+    <form id="formRegister">
+      <h3>Регистрация</h3>
+      <input name="email" type="email" placeholder="Email" required />
+      <input name="password" type="password" placeholder="Пароль (мин. 4)" minlength="4" required />
+      <div style="display:flex;gap:8px">
+        <button type="submit" class="btn primary">Создать</button>
+        <button type="button" class="btn" id="btnCancelRegister">Отмена</button>
+      </div>
+      <p id="regMsg"></p>
+    </form>
+  </dialog>
+</body>
+</html>

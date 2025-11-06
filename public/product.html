@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PC Shop — Товар</title>
+  <link rel="stylesheet" href="/public/style.css" />
+  <script defer src="/public/app.js"></script>
+  <style>
+    #buyBlock{display:none}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container nav">
+      <div class="logo"><img src="/public/img/logo.png" alt="logo"/> PC Shop</div>
+      <nav class="menu">
+        <a href="/public/index.html">Главная</a>
+        <a href="/public/product.html">Товар</a>
+        <a href="/public/contacts.html">Контакты</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <article class="card">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <img id="pImage" src="/public/img/pc1.jpg" alt="product"/>
+        <div>
+          <h2 id="pTitle">Загрузка…</h2>
+          <p id="pSpecs"></p>
+          <p><strong id="pPrice"></strong> ₽</p>
+
+          <hr style="opacity:.2"/>
+          <h3>Купить</h3>
+
+          <!-- Кнопка для показа формы -->
+          <button id="btnShowBuy" class="btn primary" style="width:100%;max-width:320px">Купить</button>
+
+          <!-- Скрытый блок оформления -->
+          <div id="buyBlock" style="display:none;margin-top:10px">
+            <form id="formBuy">
+              <label>Количество <input name="qty" type="number" value="1" min="1"/></label>
+              <button class="btn primary" style="width:100%">Оформить заказ</button>
+              <p id="buyMsg"></p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer container">© 2025 PC Shop</footer>
+</body>
+</html>
