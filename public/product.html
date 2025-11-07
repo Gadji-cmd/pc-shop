@@ -3,12 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PC Shop — Товар</title>
+  <title>PC Shop — Каталог</title>
   <link rel="stylesheet" href="/public/style.css" />
   <script defer src="/public/app.js"></script>
-  <style>
-    #buyBlock{display:none}
-  </style>
+  <style>#buyBlock{display:none}</style>
 </head>
 <body>
   <header class="header">
@@ -23,7 +21,14 @@
   </header>
 
   <main class="container">
-    <article class="card">
+    <!-- Заголовок меняем в JS на "Каталог" или название товара -->
+    <h2 id="pageTitle">Каталог</h2>
+
+    <!-- Режим 1: КАТАЛОГ -->
+    <div id="catalog" class="grid"></div>
+
+    <!-- Режим 2: КАРТОЧКА ТОВАРА -->
+    <article id="productCard" class="card" style="display:none">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
         <img id="pImage" src="/public/img/pc1.jpg" alt="product"/>
         <div>
@@ -34,10 +39,8 @@
           <hr style="opacity:.2"/>
           <h3>Купить</h3>
 
-          <!-- Кнопка для показа формы -->
           <button id="btnShowBuy" class="btn primary" style="width:100%;max-width:320px">Купить</button>
 
-          <!-- Скрытый блок оформления -->
           <div id="buyBlock" style="display:none;margin-top:10px">
             <form id="formBuy">
               <label>Количество <input name="qty" type="number" value="1" min="1"/></label>

@@ -6,13 +6,16 @@ const api = {
   order: "/api/order",
 };
 
-// Главная: загрузка карточек
+/* ---------- Главная: карточки ---------- */
 async function loadProducts() {
   const cont = document.querySelector('#products');
   if (!cont) return;
   const res = await fetch(api.products);
   const list = await res.json();
-  cont.innerHTML = list.map(p => `
+  cont.innerHTML = list.map(renderCard).join('');
+}
+function renderCard(p){
+  return `
     <div class="card">
       <img src="${p.image}" alt="${p.title}">
       <h3>${p.title}</h3>
@@ -20,16 +23,41 @@ async function loadProducts() {
       <p><strong>${p.price}</strong> ₽</p>
       <a class="btn" href="/public/product.html?id=${p.id}">Подробнее</a>
     </div>
-  `).join('');
+  `;
 }
 
-// Страница товара (детально + покупка по кнопке)
-async function loadProductPage() {
+/* ---------- Страница /public/product.html ----------
+   Если есть id -> показываем карточку товара.
+   Если id нет -> показываем каталог всех товаров + заголовок "Каталог".
+--------------------------------------------------- */
+async function loadCatalogOrProductPage(){
   const params = new URLSearchParams(location.search);
-  const id = params.get('id') || '1';
-  const h = (sel) => document.querySelector(sel);
-  if (!h('#pTitle')) return;
+  const id = params.get('id');
 
+  const catalogEl = document.querySelector('#catalog');
+  const productCard = document.querySelector('#productCard');
+  const pageTitle = document.querySelector('#pageTitle');
+
+  if (!catalogEl && !productCard) return; // не эта страница
+
+  if (!id) {
+    // Режим КАТАЛОГА
+    pageTitle.textContent = 'Каталог';
+    productCard.style.display = 'none';
+    catalogEl.style.display = 'grid';
+
+    const res = await fetch(api.products);
+    const list = await res.json();
+    catalogEl.innerHTML = list.map(renderCard).join('');
+    return;
+  }
+
+  // Режим КАРТОЧКИ ТОВАРА
+  pageTitle.textContent = 'Товар';
+  catalogEl.style.display = 'none';
+  productCard.style.display = 'block';
+
+  const h = (sel) => document.querySelector(sel);
   const res = await fetch(api.product(id));
   if (!res.ok) { h('#pTitle').textContent = 'Товар не найден'; return; }
   const p = await res.json();
@@ -39,7 +67,7 @@ async function loadProductPage() {
   h('#pPrice').textContent = p.price;
   h('#pImage').src = p.image;
 
-  // Покупка: показываем форму только по нажатию кнопки «Купить»
+  // Покупка: показываем форму только по нажатию «Купить»
   const btnShowBuy = document.querySelector('#btnShowBuy');
   const buyBlock   = document.querySelector('#buyBlock');
   const formBuy    = document.querySelector('#formBuy');
@@ -64,17 +92,12 @@ async function loadProductPage() {
     e.preventDefault();
     const qty = new FormData(formBuy).get('qty') || 1;
     const r = await fetch(api.order, { method: 'POST' });
-    if (r.ok) {
-      buyMsg.textContent = `Заказ принят: ${qty} шт.`;
-      buyMsg.style.color = '#22c55e';
-    } else {
-      buyMsg.textContent = 'Нужно войти в аккаунт';
-      buyMsg.style.color = '#ef4444';
-    }
+    if (r.ok) { buyMsg.textContent = `Заказ принят: ${qty} шт.`; buyMsg.style.color = '#22c55e'; }
+    else { buyMsg.textContent = 'Нужно войти в аккаунт'; buyMsg.style.color = '#ef4444'; }
   });
 }
 
-// Авторизация/Регистрация (2 формы, кнопки не сабмитят)
+/* ---------- Авторизация/Регистрация ---------- */
 function initAuth() {
   const dlgAuth = document.querySelector('#authDialog');
   const dlgReg  = document.querySelector('#regDialog');
@@ -105,17 +128,17 @@ function initAuth() {
   });
 }
 
-// Карта (Leaflet)
+/* ---------- Карта (контакты) ---------- */
 function initMap() {
   const el = document.getElementById('map');
   if (!el || !window.L) return;
-  const center = [55.7963, 49.1088]; // Казань
+  const center = [59.879146, 30.275893];
   const map = L.map('map').setView(center, 12);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap' }).addTo(map);
   L.marker(center).addTo(map).bindPopup('PC Shop — ждём вас!');
 }
 
-// Небольшая анимация карточек
+/* ---------- Небольшая анимация карточек ---------- */
 document.addEventListener('mouseover', (e) => {
   const card = e.target.closest('.card');
   if (card) { card.style.transform = 'translateY(-2px)'; card.style.transition = 'transform .15s'; }
@@ -125,10 +148,10 @@ document.addEventListener('mouseout', (e) => {
   if (card) { card.style.transform = ''; }
 });
 
-// Init
+/* ---------- Init ---------- */
 window.addEventListener('DOMContentLoaded', () => {
-  loadProducts();
-  loadProductPage();
+  loadProducts();              // главная (если есть #products)
+  loadCatalogOrProductPage();  // /public/product.html — каталог или карточка
   initAuth();
   initMap();
 });
